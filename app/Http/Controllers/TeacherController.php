@@ -11,8 +11,11 @@ class TeacherController extends Controller
         $this->middleware('onlyCurrentEmployee');
     }
 
-    public function upcomingClasses()
+    public function upcomingClasses(Request $request)
     {
-        return view('upcoming-classes');
+        // employee is passed in via the middleware.
+        return view('upcoming-classes', [
+            'employee' => $request->employee
+        ]);
     }
 }
