@@ -8,14 +8,14 @@ class TeacherController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('onlyCurrentEmployee');
+        $this->middleware(['auth', 'onlyCurrentEmployee']);
     }
 
     public function upcomingClasses(Request $request)
     {
-        // employee is passed in via the middleware.
+        // employee is passed in via the onlyCurrentEmployee middleware.
         return view('upcoming-classes', [
-            'employee' => $request->employee
+            'employeeId' => $request->employeeId
         ]);
     }
 }
