@@ -32,7 +32,7 @@ class OnlyCurrentEmployee
             abort(403);
         }
 
-        $request->employee = $employee;
+        $request->employeeId = $employee->id;
         return $next($request);
     }
 }
