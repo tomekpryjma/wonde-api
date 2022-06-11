@@ -1,35 +1,47 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Upcoming lessons</div>
-                </div>
+                <h1>Upcoming lessons</h1>
             </div>
         </div>
         <div class="row">
-            <ul>
-                <li v-for="cls in employee.classes.data">
-                    <strong>Class: </strong> {{ cls.name }}
+            <div v-for="cls in employee.classes.data">
 
-                    <ul v-if="cls.lessons.data.length">
-                        <li v-for="lesson in cls.lessons.data">
-                            <strong>When: </strong>{{ formatDate(lesson.start_at.date) }}<br />
-                            <strong>Where: </strong>{{ lesson.room.data.name }}
-                        </li>
+                <button class="btn class-button btn-primary" type="button" data-bs-toggle="collapse"
+                    :data-bs-target="`#accordion-${cls.id}`" aria-expanded="false"
+                    :aria-controls="`accordion-${cls.id}`">
+                    Class <strong>{{ cls.name }}</strong>
+                </button>
 
-                        <span v-if="students[cls.id]">
-                            <strong>Students:</strong>
+                <div class="collapse" :id="`accordion-${cls.id}`">
+                    <div class="card card-body">
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <h4>When and Where?</h4>
 
-                            <ul>
-                                <li v-for="student in students[cls.id]">
-                                    {{ studentName(student) }}
-                                </li>
-                            </ul>
-                        </span>
-                    </ul>
-                </li>
-            </ul>
+                                <ul v-if="cls.lessons.data.length">
+                                    <li v-for="lesson in cls.lessons.data">
+                                        {{ formatDate(lesson.start_at.date) }} in the {{ lesson.room.data.name }}
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-12">
+                                <span v-if="students[cls.id]">
+                                    <h4>Students</h4>
+
+                                    <ul>
+                                        <li v-for="student in students[cls.id]">
+                                            {{ studentName(student) }}
+                                        </li>
+                                    </ul>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -43,14 +55,12 @@ export default {
     props: ['employeeId', 'schoolId', 'token', 'apiUrl'],
     data() {
         return {
-            classes: [],
-            lessons: [],
             students: {},
             employee: null,
             url: `${this.apiUrl}/schools/${this.schoolId}`,
         }
     },
-    created() {
+    mounted() {
         const self = this;
         const auth = {
             'Authorization': `Bearer: ${this.token}`
@@ -89,6 +99,7 @@ export default {
 
             return name;
         },
+
         formatDate: function (date) {
             return moment(date).format('MMM. D, YYYY [at] h:mm A z');
         }
