@@ -5450,6 +5450,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5457,14 +5469,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   props: ['employeeId', 'schoolId', 'token', 'apiUrl'],
   data: function data() {
     return {
-      classes: [],
-      lessons: [],
       students: {},
       employee: null,
       url: "".concat(this.apiUrl, "/schools/").concat(this.schoolId)
     };
   },
-  created: function created() {
+  mounted: function mounted() {
     var _this = this;
 
     var self = this;
@@ -49843,43 +49853,70 @@ var render = function () {
   return _c("div", { staticClass: "container" }, [
     _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "ul",
-        _vm._l(_vm.employee.classes.data, function (cls) {
-          return _c("li", [
-            _c("strong", [_vm._v("Class: ")]),
-            _vm._v(" " + _vm._s(cls.name) + "\n\n                "),
-            cls.lessons.data.length
-              ? _c(
-                  "ul",
-                  [
-                    _vm._l(cls.lessons.data, function (lesson) {
-                      return _c("li", [
-                        _c("strong", [_vm._v("When: ")]),
-                        _vm._v(_vm._s(_vm.formatDate(lesson.start_at.date))),
-                        _c("br"),
-                        _vm._v(" "),
-                        _c("strong", [_vm._v("Where: ")]),
-                        _vm._v(
-                          _vm._s(lesson.room.data.name) +
-                            "\n                    "
-                        ),
-                      ])
-                    }),
+    _c(
+      "div",
+      { staticClass: "row" },
+      _vm._l(_vm.employee.classes.data, function (cls) {
+        return _c("div", [
+          _c(
+            "button",
+            {
+              staticClass: "btn class-button btn-primary",
+              attrs: {
+                type: "button",
+                "data-bs-toggle": "collapse",
+                "data-bs-target": "#accordion-" + cls.id,
+                "aria-expanded": "false",
+                "aria-controls": "accordion-" + cls.id,
+              },
+            },
+            [
+              _vm._v("\n                Class "),
+              _c("strong", [_vm._v(_vm._s(cls.name))]),
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "collapse", attrs: { id: "accordion-" + cls.id } },
+            [
+              _c("div", { staticClass: "card card-body" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12 col-lg-6" }, [
+                    _c("h4", [_vm._v("When and Where?")]),
                     _vm._v(" "),
+                    cls.lessons.data.length
+                      ? _c(
+                          "ul",
+                          _vm._l(cls.lessons.data, function (lesson) {
+                            return _c("li", [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(_vm.formatDate(lesson.start_at.date)) +
+                                  " in the " +
+                                  _vm._s(lesson.room.data.name) +
+                                  "\n                                "
+                              ),
+                            ])
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12" }, [
                     _vm.students[cls.id]
                       ? _c("span", [
-                          _c("strong", [_vm._v("Students:")]),
+                          _c("h4", [_vm._v("Students")]),
                           _vm._v(" "),
                           _c(
                             "ul",
                             _vm._l(_vm.students[cls.id], function (student) {
                               return _c("li", [
                                 _vm._v(
-                                  "\n                                " +
+                                  "\n                                        " +
                                     _vm._s(_vm.studentName(student)) +
-                                    "\n                            "
+                                    "\n                                    "
                                 ),
                               ])
                             }),
@@ -49887,15 +49924,15 @@ var render = function () {
                           ),
                         ])
                       : _vm._e(),
-                  ],
-                  2
-                )
-              : _vm._e(),
-          ])
-        }),
-        0
-      ),
-    ]),
+                  ]),
+                ]),
+              ]),
+            ]
+          ),
+        ])
+      }),
+      0
+    ),
   ])
 }
 var staticRenderFns = [
@@ -49903,13 +49940,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center" }, [
+    return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-8" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("Upcoming lessons"),
-          ]),
-        ]),
+        _c("h1", [_vm._v("Upcoming lessons")]),
       ]),
     ])
   },
